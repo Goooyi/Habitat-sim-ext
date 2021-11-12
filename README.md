@@ -16,7 +16,7 @@ def mypy(sim, obj_id, scale, jason_and_object_path):
   motion_type = ...DYNAMIC? KINEMATIC? STATIC?
   # if DYNAMIC:
   forces,torques,instantanious_initial_velocities
-  # if DYNAMIC:
+  # if KINEMATIC:
   translation,rotation
   
   velocity = ...
@@ -24,8 +24,14 @@ def mypy(sim, obj_id, scale, jason_and_object_path):
  ```
  * Habitat 2.0 Tutorial [Ref](https://aihabitat.org/docs/habitat-sim/managed-rigid-object-tutorial.html#kinematic-object-placement), include: modify an object's user-defined configurations
  ## P
- * Kinematic复杂的运动?接收一个translation matrix？ 那之后bounding box怎么办？一是物体的（0，0，0）点是在哪？（好像不重要）二是物体的长宽高（不重要），只需要raise，然后test是否penetration
+ * Kinematic复杂的运动?接收一个translation matrix？ 那之后bounding box怎么办？
 
  * 在用户给定的bb
  * Kinematic will not interact with the scene, what happend when collision with other object or other scence?
  
+
+* 高度规定，寻路
+* 初识点赞时random， 暂时一种运动方式，往复循环运动
+* 寻路的时候的action
+* bb限制运动轨迹
+* 找一些复杂的模型（人，机器人）
