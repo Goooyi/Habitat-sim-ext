@@ -1,3 +1,7 @@
+# P
+1. 30fps / 60fps
+2. path3
+
 # Habitat-sim-ext
 ## Idea
 * 函数化
@@ -23,7 +27,7 @@ def mypy(sim, obj_id, scale, jason_and_object_path):
   obj_template_handle = obj_attr_mgr.get_file_template_handles(name)[0]
  ```
  * Habitat 2.0 Tutorial [Ref](https://aihabitat.org/docs/habitat-sim/managed-rigid-object-tutorial.html#kinematic-object-placement), include: modify an object's user-defined configurations
- ## P
+ ## GeneralP
  * Kinematic复杂的运动?接收一个translation matrix？ 那之后bounding box怎么办？
 
  * 在用户给定的bb
