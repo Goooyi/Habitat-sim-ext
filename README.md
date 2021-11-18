@@ -1,7 +1,7 @@
 # P
 1. 30fps / 60fps
 2. path3: (s:1.reset oriantation or predefined action or ?)
-
+3. radius = 0.4 won't move
 # Habitat-sim-ext
 ## Idea
 * 函数化
