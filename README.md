@@ -1,6 +1,6 @@
 # P
 1. 30fps / 60fps
-2. path3
+2. path3: (s:1.reset oriantation or predefined action or ?)
 
 # Habitat-sim-ext
 ## Idea
