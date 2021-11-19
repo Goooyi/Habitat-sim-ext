@@ -39,3 +39,7 @@ def mypy(sim, obj_id, scale, jason_and_object_path):
 * 寻路的时候的action
 * bb限制运动轨迹
 * 找一些复杂的模型（人，机器人）
+
+1.试试新机器人模型
+2.台阶高度
+3.新的step
