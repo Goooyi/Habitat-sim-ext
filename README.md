@@ -1,5 +1,5 @@
 # P
-1. 30fps / 60fps
+1. 30fps / 60fps : It's a coomon issue in simulation world, usually a higher steps per second make the simulation more stable and accurate.
 2. path3: (s:1.reset oriantation or predefined action or ?)
 3. radius = 0.4 won't move
 # Habitat-sim-ext
