@@ -47,7 +47,7 @@ def mypy(sim, obj_id, scale, jason_and_object_path):
 ## Dataset
 [Paper with code](https://paperswithcode.com/sota/unsupervised-video-object-segmentation-on)
 1. [DAVIS](https://davischallenge.org/)
-2. [PETS2001]([https://limu.ait.kyushu-u.ac.jp/dataset/en/)
+2. [PETS2001](https://limu.ait.kyushu-u.ac.jp/dataset/en/)
 3. [PESMOD](https://github.com/mribrahim/PESMOD)
 4. [LaSOT](https://paperswithcode.com/dataset/lasot)
 5. [GOT-10k](https://paperswithcode.com/dataset/got-10k)
