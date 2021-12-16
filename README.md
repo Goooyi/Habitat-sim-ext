@@ -52,3 +52,4 @@ def mypy(sim, obj_id, scale, jason_and_object_path):
 4. (LaSOT)[https://paperswithcode.com/dataset/lasot]
 5. (GOT-10k)[https://paperswithcode.com/dataset/got-10k]
 6. (TbD-3D)[https://paperswithcode.com/dataset/tbd-3d]
+7. (VisDrone-Dataset)[https://github.com/VisDrone/VisDrone-Dataset]
