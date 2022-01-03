@@ -384,12 +384,20 @@ def track_waypoint(waypoint, rs, vc, dt=1.0 / 60.0):
     else:
         # slow down to 0
         new_velocity = (vc.linear_velocity[2]) / 2.0
+        # new_velocity = 0
     vc.linear_velocity = mn.Vector3(0, 0, new_velocity)
 
     # angular part
     rot_dir = 1.0
+    
+    print(glob_right) ##
+    print(u_to_waypoint) ##
     if mn.math.dot(glob_right, u_to_waypoint) < 0:
+    # if mn.math.cross(u_to_waypoint,glob_forward)[1] >0  :
         rot_dir = -1.0
+    print(rot_dir) ##
+    print(mn.math.angle(glob_forward, u_to_waypoint))
+    print(mn.math.cross(u_to_waypoint,glob_forward))
     angular_correction = 0.0
     if angle_error > (max_turn_speed * 10.0 * dt):
         angular_correction = max_turn_speed
@@ -483,8 +491,8 @@ default_nav_mesh_settings = habitat_sim.NavMeshSettings()
 default_nav_mesh_settings.set_defaults()
 inflated_nav_mesh_settings = habitat_sim.NavMeshSettings()
 inflated_nav_mesh_settings.set_defaults()
-inflated_nav_mesh_settings.agent_radius = 0.4
-inflated_nav_mesh_settings.agent_height = 1
+inflated_nav_mesh_settings.agent_radius = 0.2
+inflated_nav_mesh_settings.agent_height = 1.5
 
 sim.config.sim_cfg.allow_sliding = True
 recompute_successful = sim.recompute_navmesh(sim.pathfinder, inflated_nav_mesh_settings)
@@ -581,41 +589,42 @@ continuous_path_follower = ContinuousPathFollower(
 )
 
 navmesh_settings = habitat_sim.NavMeshSettings()
-navmesh_settings.agent_max_climb = 0.1
-navmesh_settings.agent_max_slope = 30
+
 
 # set fps
 show_waypoint_indicators = True  # @param {type:"boolean"}
-time_step = 1.0 / 50.0
+time_step = 1.0 / 60.0
 
 sim.config.sim_cfg.allow_sliding = True
 
-for i in range(2):
+for i in range(4):
     if i == 1:
         print("@111111111111@")
+        # path2.requested_start = mn.Vector3(sim.get_translation(locobot_id))
+        # sim.pathfinder.find_path(path2)
         print(sim.get_translation(locobot_id))
         continuous_path_follower = ContinuousPathFollower(
-            sim, path2, sim.get_object_scene_node(locobot_id), waypoint_threshold=0.1
+            sim, path2, sim.get_object_scene_node(locobot_id), waypoint_threshold=0.8
         )
     if i == 2:
         print("$222222222222$")
         print(sim.get_translation(locobot_id))
         continuous_path_follower = ContinuousPathFollower(
-            sim, path3, sim.get_object_scene_node(locobot_id), waypoint_threshold=0.1
+            sim, path3, sim.get_object_scene_node(locobot_id), waypoint_threshold=0.8
         )
 
     if i == 3:
         print("$333333333$")
         print(sim.get_translation(locobot_id))
         continuous_path_follower = ContinuousPathFollower(
-            sim, path4, sim.get_object_scene_node(locobot_id), waypoint_threshold=0.1
+            sim, path4, sim.get_object_scene_node(locobot_id), waypoint_threshold=0.8
         )
 
     if i == 4:
         print("$444444444$")
         print(sim.get_translation(locobot_id))
         continuous_path_follower = ContinuousPathFollower(
-            sim, path5, sim.get_object_scene_node(locobot_id), waypoint_threshold=0.1
+            sim, path5, sim.get_object_scene_node(locobot_id), waypoint_threshold=0.8
         )
 
 
@@ -627,7 +636,7 @@ for i in range(2):
 
     # manually control the object's kinematic state via velocity integration
     start_time = sim.get_world_time()
-    max_time = 10.0
+    max_time = 20.0
     previous_pos = sim.get_translation(locobot_id)
     while (
         continuous_path_follower.progress < 1.0
@@ -663,7 +672,10 @@ for i in range(2):
             previous_rigid_state.translation, target_rigid_state.translation
         )
 
-        sim.set_translation(end_pos, locobot_id)
+        # sim.set_translation(end_pos, locobot_id)
+        sim.set_translation(target_rigid_state.translation, locobot_id)
+        print("rotation here!!!rotation here!!!rotation here!!!")
+        print(target_rigid_state.rotation)
         sim.set_rotation(target_rigid_state.rotation, locobot_id)
 
         # Check if a collision occured
