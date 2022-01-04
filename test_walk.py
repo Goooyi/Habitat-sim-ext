@@ -55,7 +55,7 @@ def make_cfg(settings):
             settings["height"],
             settings["width"],
         ]
-        color_sensor_1st_person_spec.postition = [0.0, settings["sensor_height"], 0.0]
+        color_sensor_1st_person_spec.postition = [0.0,settings["sensor_height"], 0.0]
         color_sensor_1st_person_spec.orientation = [
             settings["sensor_pitch"],
             0.0,
@@ -156,7 +156,7 @@ def make_simulator_from_settings(sim_settings):
     sim = habitat_sim.Simulator(cfg)
     # Managers of various Attributes templates
     obj_attr_mgr = sim.get_object_template_manager()
-    obj_attr_mgr.load_configs(str(os.path.join(data_path, "objects/example_objects")))
+    # obj_attr_mgr.load_configs(str(os.path.join(data_path, "objects/example_objects")))
     obj_attr_mgr.load_configs(str(os.path.join(data_path, "objects/locobot_merged")))
     prim_attr_mgr = sim.get_asset_template_manager()
     stage_attr_mgr = sim.get_stage_template_manager()
@@ -392,7 +392,7 @@ def track_waypoint(waypoint, rs, vc, dt=1.0 / 60.0):
     
     print(glob_right) ##
     print(u_to_waypoint) ##
-    if mn.math.dot(glob_right, u_to_waypoint) < 0:
+    if mn.math.dot(u_to_waypoint,glob_right) < 0:
     # if mn.math.cross(u_to_waypoint,glob_forward)[1] >0  :
         rot_dir = -1.0
     print(rot_dir) ##
@@ -478,35 +478,37 @@ sim_settings = make_default_settings()
 sim_settings["scene"] = "./data/scene_datasets/mp3d/1LXtFkjw3qL/1LXtFkjw3qL.glb"  # @param{type:"string"}
 # fmt: on
 sim_settings["sensor_pitch"] = 0
-sim_settings["sensor_height"] = 0.3
+sim_settings["sensor_height"] = 0.6
 sim_settings["color_sensor_3rd_person"] = True
-sim_settings["color_sensor_1st_person"] = False
+sim_settings["color_sensor_1st_person"] = True
 sim_settings["depth_sensor_1st_person"] = True
 sim_settings["semantic_sensor_1st_person"] = True
 
 make_simulator_from_settings(sim_settings)
-# navmesh settings
 
+# navmesh settings
 default_nav_mesh_settings = habitat_sim.NavMeshSettings()
 default_nav_mesh_settings.set_defaults()
 inflated_nav_mesh_settings = habitat_sim.NavMeshSettings()
 inflated_nav_mesh_settings.set_defaults()
 inflated_nav_mesh_settings.agent_radius = 0.2
 inflated_nav_mesh_settings.agent_height = 1.5
+inflated_nav_mesh_settings.agent_max_climb = 10
+inflated_nav_mesh_settings.agent_max_slope = 60
 
 sim.config.sim_cfg.allow_sliding = True
-recompute_successful = sim.recompute_navmesh(sim.pathfinder, inflated_nav_mesh_settings)
-if not recompute_successful:
-    print("Failed to recompute navmesh!")
+# recompute_successful = sim.recompute_navmesh(sim.pathfinder, inflated_nav_mesh_settings)
+# if not recompute_successful:
+#     print("Failed to recompute navmesh!")
 
 # Set other example parameters:
 
 
-seed = 2  # @param {type:"integer"}
+seed = 4  # @param {type:"integer"}
 random.seed(seed)
 sim.seed(seed)
 np.random.seed(seed)
-  # @param {type:"boolean"}
+# @param {type:"boolean"}
 # Load the selected object, here we use locobot and place it on the NavMesh
 locobot_template_id = obj_attr_mgr.load_configs(
     str(os.path.join(data_path, "objects/locobot_merged")),False
@@ -593,11 +595,11 @@ navmesh_settings = habitat_sim.NavMeshSettings()
 
 # set fps
 show_waypoint_indicators = True  # @param {type:"boolean"}
-time_step = 1.0 / 60.0
+time_step = 1.0 / 30.0
 
 sim.config.sim_cfg.allow_sliding = True
 
-for i in range(4):
+for i in range(1):
     if i == 1:
         print("@111111111111@")
         # path2.requested_start = mn.Vector3(sim.get_translation(locobot_id))
@@ -636,7 +638,7 @@ for i in range(4):
 
     # manually control the object's kinematic state via velocity integration
     start_time = sim.get_world_time()
-    max_time = 20.0
+    max_time = 10.0
     previous_pos = sim.get_translation(locobot_id)
     while (
         continuous_path_follower.progress < 1.0
@@ -743,22 +745,22 @@ if make_video:
     overlay_dims = (int(sim_settings["width"] / 5), int(sim_settings["height"] / 5))
     print("overlay_dims = " + str(overlay_dims))
     overlay_settings = [
+        # {
+        #     "obs": "rgba_camera_1stperson",
+        #     "type": "color",
+        #     "dims": overlay_dims,
+        #     "pos": (10, 10),
+        #     "border": 2,
+        # },
+        # {
+        #     "obs": "depth_camera_1stperson",
+        #     "type": "depth",
+        #     "dims": overlay_dims,
+        #     "pos": (10, 30 + overlay_dims[1]),
+        #     "border": 2,
+        # },
         {
-            "obs": "color_sensor_1st_person",
-            "type": "color",
-            "dims": overlay_dims,
-            "pos": (10, 10),
-            "border": 2,
-        },
-        {
-            "obs": "depth_sensor_1st_person",
-            "type": "depth",
-            "dims": overlay_dims,
-            "pos": (10, 30 + overlay_dims[1]),
-            "border": 2,
-        },
-        {
-            "obs": "semantic_sensor_1st_person",
+            "obs": "semantic_sensor_1stperson",
             "type": "semantic",
             "dims": overlay_dims,
             "pos": (10, 50 + overlay_dims[1] * 2),
@@ -775,7 +777,7 @@ if make_video:
         fps=int(1.0 / time_step),
         open_vid=show_video,
         overlay_settings=overlay_settings,
-        depth_clip=10.0,
+        depth_clip=20.0,
     )
 
 # remove locobot while leaving the agent node for later use
