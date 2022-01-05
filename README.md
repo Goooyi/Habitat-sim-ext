@@ -52,3 +52,9 @@ def mypy(sim, obj_id, scale, jason_and_object_path):
 
 ## MOD method
 1. [MODNet](http://webdocs.cs.ualberta.ca/~vis/kittimoseg/)
+
+# Issues
+1. [Object_id to semantic_id mapping](https://github.com/facebookresearch/habitat-sim/issues/760) and:
+https://github.com/facebookresearch/habitat-sim/issues/910
+2. [set semantic id](https://github.com/facebookresearch/habitat-sim/pull/668)
+3. [use Replica within AI Habitat](https://github.com/facebookresearch/habitat-sim/issues/1256)
