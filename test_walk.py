@@ -475,7 +475,8 @@ def setup_path_visualization(sim, path_follower, vis_samples=100):
 # Embodied Continuous Navigation to find a sampled object
 sim_settings = make_default_settings()
 # fmt: off
-sim_settings["scene"] = "./data/scene_datasets/mp3d/1LXtFkjw3qL/1LXtFkjw3qL.glb"  # @param{type:"string"}
+# sim_settings["scene"] = "./data/scene_datasets/mp3d/1LXtFkjw3qL/1LXtFkjw3qL.glb"  # @param{type:"string"}
+sim_settings["scene"] = "./data/scene_datasets/habitat-test-scenes/apartment_1.glb"  # @param{type:"string"}
 # fmt: on
 sim_settings["sensor_pitch"] = 0
 sim_settings["sensor_height"] = 0.6
@@ -497,9 +498,9 @@ inflated_nav_mesh_settings.agent_max_climb = 10
 inflated_nav_mesh_settings.agent_max_slope = 60
 
 sim.config.sim_cfg.allow_sliding = True
-# recompute_successful = sim.recompute_navmesh(sim.pathfinder, inflated_nav_mesh_settings)
-# if not recompute_successful:
-#     print("Failed to recompute navmesh!")
+recompute_successful = sim.recompute_navmesh(sim.pathfinder, inflated_nav_mesh_settings)
+if not recompute_successful:
+    print("Failed to recompute navmesh!")
 
 # Set other example parameters:
 
@@ -539,6 +540,29 @@ vel_control.ang_vel_is_local = True
 # locobot_obj.translation = sim.pathfinder.get_random_navigable_point()
 sim.set_translation(sim.pathfinder.get_random_navigable_point(), locobot_id)
 observations = []
+
+
+_locobot_01 = rigid_obj_mgr.add_object_by_template_id(locobot_template_id)
+_locobot_02 = rigid_obj_mgr.add_object_by_template_id(locobot_template_id)
+_locobot_03 = rigid_obj_mgr.add_object_by_template_id(locobot_template_id)
+_locobot_04 = rigid_obj_mgr.add_object_by_template_id(locobot_template_id)
+sim.set_object_motion_type(habitat_sim.physics.MotionType.KINEMATIC, _locobot_01.object_id)
+sim.set_object_motion_type(habitat_sim.physics.MotionType.KINEMATIC, _locobot_02.object_id)
+sim.set_object_motion_type(habitat_sim.physics.MotionType.KINEMATIC, _locobot_03.object_id)
+sim.set_object_motion_type(habitat_sim.physics.MotionType.KINEMATIC, _locobot_04.object_id)
+sim.set_translation(sim.pathfinder.get_random_navigable_point(), _locobot_01.object_id)
+sim.set_translation(sim.pathfinder.get_random_navigable_point(), _locobot_02.object_id)
+sim.set_translation(sim.pathfinder.get_random_navigable_point(), _locobot_03.object_id)
+sim.set_translation(sim.pathfinder.get_random_navigable_point(), _locobot_04.object_id)
+
+_locobot_01.semantic_id = 1
+_locobot_02.semantic_id = 2
+_locobot_03.semantic_id = 3
+_locobot_04.semantic_id = 4
+
+
+
+
 
 # get shortest path to the object from the agent position
 found_path = False
@@ -599,7 +623,7 @@ time_step = 1.0 / 30.0
 
 sim.config.sim_cfg.allow_sliding = True
 
-for i in range(1):
+for i in range(5):
     if i == 1:
         print("@111111111111@")
         # path2.requested_start = mn.Vector3(sim.get_translation(locobot_id))
@@ -638,7 +662,7 @@ for i in range(1):
 
     # manually control the object's kinematic state via velocity integration
     start_time = sim.get_world_time()
-    max_time = 10.0
+    max_time = 20.0
     previous_pos = sim.get_translation(locobot_id)
     while (
         continuous_path_follower.progress < 1.0
@@ -739,6 +763,8 @@ while sim.get_world_time() - start_time < 2.0:
     sim.step_physics(time_step)
     observations.append(sim.get_sensor_observations())
 
+
+
 # video rendering with embedded 1st person view
 video_prefix = "test_walk"
 if make_video:
@@ -779,6 +805,11 @@ if make_video:
         overlay_settings=overlay_settings,
         depth_clip=20.0,
     )
+
+objs = sim.semantic_scene.objects
+print(objs)
+for obj in objs:
+    print(obj.semantic_id)
 
 # remove locobot while leaving the agent node for later use
 # rigid_obj_mgr.remove_object_by_id(locobot_obj.object_id, delete_object_node=False)
