@@ -4,7 +4,8 @@
 3. radius = 0.4 won't move
 # Habitat-sim-ext
 ## Idea
-* 函数化
+* 函数化 and json
+* What if agents walk into each other?
 ```
 from habitat_sim.utils import mypy
 ##############
