@@ -7,7 +7,7 @@
 * 函数化 and json
 * What if agents walk into each other?
 * stuck on stairs?
-* better navmesh
+* better navmesh is very important
 ```
 from habitat_sim.utils import mypy
 ##############
