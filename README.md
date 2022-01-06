@@ -8,6 +8,7 @@
 * What if agents walk into each other?
 * stuck on stairs?
 * better navmesh is very important
+* do other walker need to do defined walking or just random walk is enough?
 ```
 from habitat_sim.utils import mypy
 ##############
