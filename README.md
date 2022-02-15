@@ -68,6 +68,8 @@ https://github.com/antonilo/unsupervised_detection
 
 https://github.com/antonilo/unsupervised_detection
 
+https://github.com/seoungwugoh/STM
+
 
 ## MOD method
 1. [MODNet](http://webdocs.cs.ualberta.ca/~vis/kittimoseg/)
