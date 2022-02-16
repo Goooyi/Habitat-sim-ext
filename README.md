@@ -72,6 +72,8 @@ https://github.com/seoungwugoh/STM
 
 https://www.vision.rwth-aachen.de/page/mots
 
+https://paperswithcode.com/paper/shifting-more-attention-to-video-salient
+
 
 ## MOD method
 1. [MODNet](http://webdocs.cs.ualberta.ca/~vis/kittimoseg/)
