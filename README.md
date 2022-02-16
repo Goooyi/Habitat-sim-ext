@@ -74,6 +74,8 @@ https://www.vision.rwth-aachen.de/page/mots
 
 https://paperswithcode.com/paper/shifting-more-attention-to-video-salient
 
+https://github.com/tri-ml/dd3d
+
 
 ## MOD method
 1. [MODNet](http://webdocs.cs.ualberta.ca/~vis/kittimoseg/)
