@@ -1,3 +1,7 @@
+# TODO
+velocity 自定义
+combine paths for obj to one
+
 # P
 1. 30fps / 60fps : It's a coomon issue in simulation world, usually a higher steps per second make the simulation more stable and accurate. Also the collision margin maight help.
 2. path3: (s:1.reset oriantation or predefined action or ?)
