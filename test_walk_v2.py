@@ -491,15 +491,14 @@ default_nav_mesh_settings = habitat_sim.NavMeshSettings()
 default_nav_mesh_settings.set_defaults()
 inflated_nav_mesh_settings = habitat_sim.NavMeshSettings()
 inflated_nav_mesh_settings.set_defaults()
-inflated_nav_mesh_settings.agent_radius = 0.2
-inflated_nav_mesh_settings.agent_height = 1.5
-inflated_nav_mesh_settings.agent_max_climb = 10
-inflated_nav_mesh_settings.agent_max_slope = 60
+inflated_nav_mesh_settings.agent_radius = 0.35
+inflated_nav_mesh_settings.agent_height = 1.2
 
 # sim.config.sim_cfg.allow_sliding = True
-# recompute_successful = sim.recompute_navmesh(sim.pathfinder, inflated_nav_mesh_settings)
-# if not recompute_successful:
-#     print("Failed to recompute navmesh!")
+recompute_successful = sim.recompute_navmesh(sim.pathfinder, inflated_nav_mesh_settings)
+if not recompute_successful:
+    print("Failed to recompute navmesh!")
+    raise RuntimeError('Failed to recompute navmesh!')
 
 # Set other example parameters:
 
@@ -603,9 +602,9 @@ if not found_path:
 
 vis_objs = []
 
-recompute_successful = sim.recompute_navmesh(sim.pathfinder, default_nav_mesh_settings)
-if not recompute_successful:
-    print("Failed to recompute navmesh 2!")
+# recompute_successful = sim.recompute_navmesh(sim.pathfinder, default_nav_mesh_settings)
+# if not recompute_successful:
+#     print("Failed to recompute navmesh 2!")
 
 
 
@@ -697,8 +696,8 @@ for i in range(5):
             previous_rigid_state.translation, target_rigid_state.translation
         )
 
-        # sim.set_translation(end_pos, locobot_id)
-        sim.set_translation(target_rigid_state.translation, locobot_id)
+        sim.set_translation(end_pos, locobot_id)
+        # sim.set_translation(target_rigid_state.translation, locobot_id)
         print("rotation here!!!rotation here!!!rotation here!!!")
         print(target_rigid_state.rotation)
         sim.set_rotation(target_rigid_state.rotation, locobot_id)
@@ -730,8 +729,8 @@ for i in range(5):
         # we check to see if the the amount moved after the application of the filter
         # is _less_ than the amount moved before the application of the filter
         EPS = 1e-5
-        # collided = (dist_moved_after_filter) < dist_moved_before_filter or (previous_pos-sim.get_translation(locobot_id)).dot() < EPS
-        collided =  (previous_pos-sim.get_translation(locobot_id)).dot() < EPS
+        collided = (dist_moved_after_filter + EPS) < dist_moved_before_filter
+        # collided =  (previous_pos-sim.get_translation(locobot_id)).dot() < EPS
         if(collided):
             print("Warning: collided here!!")
         #     # TODO: reset or change oriantation so it can continue to run?
