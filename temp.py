@@ -46,10 +46,7 @@ class PedestrianPathFollower(object):
         #     raise RuntimeError("Couldn't find an initial object placement. Aborting.")
 
         # find valid initial location and place object nicely
-
-        # if not can_sample:
-        #     print("Couldn't find an initial object placement. Aborting.")
-
+        
         # check if all path navigable: need modification
         for i in range(self.total_path_number):
             print(self.found_paths[i].requested_start)
