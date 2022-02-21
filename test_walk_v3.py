@@ -1,4 +1,8 @@
 # %%
+
+# TODO: navmesh setting
+# TODO: navmesh recompute for every ped and agent?
+# TODO: time limit for each path?
 # Import necessary modules, define some convenience functions, and initialize the Simulator and Agent.
 import math
 import os
@@ -477,6 +481,8 @@ sim_settings = make_default_settings()
 # fmt: off
 # sim_settings["scene"] = "./data/scene_datasets/mp3d/1LXtFkjw3qL/1LXtFkjw3qL.glb"  # @param{type:"string"}
 sim_settings["scene"] = "./data/scene_datasets/habitat-test-scenes/apartment_1.glb"  # @param{type:"string"}
+# sim_settings["scene"] = "./data/scene_datasets/habitat-test-scenes/skokloster-castle.glb" 
+# sim_settings["scene"] = "./data/scene_datasets/habitat-test-scenes/van-gogh-room.glb" 
 # fmt: on
 sim_settings["sensor_pitch"] = 0
 sim_settings["sensor_height"] = 0.6
@@ -492,8 +498,9 @@ default_nav_mesh_settings = habitat_sim.NavMeshSettings()
 default_nav_mesh_settings.set_defaults()
 inflated_nav_mesh_settings = habitat_sim.NavMeshSettings()
 inflated_nav_mesh_settings.set_defaults()
+# TODO: give user the option to set this if collision happened, so before this, must give collisin warning
 inflated_nav_mesh_settings.agent_radius = 0.35
-inflated_nav_mesh_settings.agent_height = 1.2
+inflated_nav_mesh_settings.agent_height = 1.4
 
 # sim.config.sim_cfg.allow_sliding = True
 recompute_successful = sim.recompute_navmesh(sim.pathfinder, inflated_nav_mesh_settings)
@@ -511,7 +518,8 @@ np.random.seed(seed)
 # @param {type:"boolean"}
 # Load the selected object, here we use locobot and place it on the NavMesh
 locobot_template_id = obj_attr_mgr.load_configs(
-    str(os.path.join(data_path, "objects/locobot_merged")),False
+    # str(os.path.join(data_path, "objects/locobot_merged")),False
+    str(os.path.join(data_path, "objects/gladiador.glb")),False
 )[0]
 # load a selected target object and place it on the NavMesh
 # obj_id_1 = sim.add_object(locobot_template_id)
@@ -714,6 +722,9 @@ for i in range(5):
         
         # update pedestrain state
         ped_1.integrate_state(time_step)
+        ped_2.integrate_state(time_step)
+        ped_3.integrate_state(time_step)
+        ped_4.integrate_state(time_step)
 
         # Check if a collision occured
         dist_moved_before_filter = (
@@ -778,7 +789,7 @@ while sim.get_world_time() - start_time < 2.0:
 
 
 # video rendering with embedded 1st person view
-video_prefix = "test_walk"
+video_prefix = "test_walk_04"
 if make_video:
     overlay_dims = (int(sim_settings["width"] / 5), int(sim_settings["height"] / 5))
     print("overlay_dims = " + str(overlay_dims))
