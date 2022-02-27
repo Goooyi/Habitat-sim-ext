@@ -394,8 +394,6 @@ def track_waypoint(waypoint, rs, vc, dt=1.0 / 60.0):
     # angular part
     rot_dir = 1.0
     
-    print(glob_right) ##
-    print(u_to_waypoint) ##
     if mn.math.dot(u_to_waypoint,glob_right) < 0:
     # if mn.math.cross(u_to_waypoint,glob_forward)[1] >0  :
         rot_dir = -1.0
@@ -482,7 +480,7 @@ sim_settings = make_default_settings()
 # sim_settings["scene"] = "./data/scene_datasets/mp3d/1LXtFkjw3qL/1LXtFkjw3qL.glb"  # @param{type:"string"}
 sim_settings["scene"] = "./data/scene_datasets/habitat-test-scenes/apartment_1.glb"  # @param{type:"string"}
 # sim_settings["scene"] = "./data/scene_datasets/habitat-test-scenes/skokloster-castle.glb" 
-# sim_settings["scene"] = "./data/scene_datasets/habitat-test-scenes/van-gogh-room.glb" 
+# sim_settings["scene"] = "./data/scene_datasets/hm3d-val-habitat/00811-7UrtFsADwob/7UrtFsADwob.basis.glb" 
 # fmt: on
 sim_settings["sensor_pitch"] = 0
 sim_settings["sensor_height"] = 0.6
@@ -501,7 +499,10 @@ inflated_nav_mesh_settings.set_defaults()
 # TODO: give user the option to set this if collision happened, so before this, must give collisin warning
 inflated_nav_mesh_settings.agent_radius = 0.35
 inflated_nav_mesh_settings.agent_height = 1.4
-
+# min:0.01, max:0.5, step:0.01, default = 0.2
+inflated_nav_mesh_settings.agent_max_climb = 0.02
+# min:0, max:85, step:1.0,default = 45.0
+inflated_nav_mesh_settings.agent_max_slope = 20.0
 # sim.config.sim_cfg.allow_sliding = True
 recompute_successful = sim.recompute_navmesh(sim.pathfinder, inflated_nav_mesh_settings)
 if not recompute_successful:
@@ -517,9 +518,10 @@ sim.seed(seed)
 np.random.seed(seed)
 # @param {type:"boolean"}
 # Load the selected object, here we use locobot and place it on the NavMesh
+print(str(os.path.join(data_path, "sci-fi_police_reupload/scene.gltf")))
 locobot_template_id = obj_attr_mgr.load_configs(
-    # str(os.path.join(data_path, "objects/locobot_merged")),False
-    str(os.path.join(data_path, "objects/gladiador.glb")),False
+    str(os.path.join(data_path, "objects/gladiador")),False
+    # str(os.path.join(data_path, "sci-fi_police_reupload/scene.gltf")),False
 )[0]
 # load a selected target object and place it on the NavMesh
 # obj_id_1 = sim.add_object(locobot_template_id)
