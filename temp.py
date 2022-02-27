@@ -152,18 +152,17 @@ class PedestrianPathFollower(object):
         angular_error_threshold = 0.5
         max_linear_speed = 1.0
         max_turn_speed = 1.0
-        glob_forward = self.obj.rotation.transform_vector(mn.Vector3(0, 0, -1.0)).normalized()
-        glob_right = self.obj.rotation.transform_vector(mn.Vector3(-1.0, 0, 0)).normalized()
+        glob_forward = self.obj.rotation.transform_vector(mn.Vector3(0, 0, 1.0)).normalized()
+        glob_right = self.obj.rotation.transform_vector(mn.Vector3(1.0, 0, 0)).normalized()
         to_waypoint = mn.Vector3(self.waypoint) - self.obj.translation
         u_to_waypoint = to_waypoint.normalized()
         angle_error = float(mn.math.angle(glob_forward, u_to_waypoint))
 
         new_velocity = 0
-        print("Pedestrain angle_error！！！！！: %2.6f" % angle_error)
-
+        
         if angle_error < angular_error_threshold:
             # speed up to max
-            new_velocity = (self.vel_control.linear_velocity[2] - max_linear_speed) / 2.0
+            new_velocity = (self.vel_control.linear_velocity[2] + max_linear_speed) / 2.0
         else:
             # slow down to 0
             new_velocity = (self.vel_control.linear_velocity[2]) / 2.0
@@ -175,10 +174,8 @@ class PedestrianPathFollower(object):
         
         if mn.math.dot(u_to_waypoint,glob_right) < 0:
         # if mn.math.cross(u_to_waypoint,glob_forward)[1] >0  :
-            rot_dir = -1.0
-        print(rot_dir) ##
-        print(mn.math.angle(glob_forward, u_to_waypoint))
-        print(mn.math.cross(u_to_waypoint,glob_forward))
+            rot_dir =-1.0
+
         angular_correction = 0.0
         if angle_error > (max_turn_speed * 10.0 * dt):
             angular_correction = max_turn_speed
