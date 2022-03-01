@@ -1,0 +1,11 @@
+{
+    "render_asset": "angry_girl.glb",
+    "collision_asset": "angry_girl.glb",
+    "join_collision_meshes": false,
+    "scale":[1,1,1],
+    "front":[0.0,0.0,1.0],
+    "mass": 4.35,
+    "friction_coefficient": 0.4,
+    "restitution_coefficient": 0,
+    "COM": [0, 0.005, 0]
+}

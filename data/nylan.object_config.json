@@ -1,0 +1,10 @@
+{
+    "render_asset": "nylan.glb",
+    "collision_asset": "nylan.glb",
+    "join_collision_meshes": false,
+    "scale":[8,8,8],
+    "mass": 4.35,
+    "friction_coefficient": 0.4,
+    "restitution_coefficient": 0.05,
+    "COM": [0, 0.005, 0]
+}

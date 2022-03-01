@@ -1,0 +1,11 @@
+{
+    "render_asset": "fox.glb",
+    "collision_asset": "fox.glb",
+    "join_collision_meshes": false,
+    "scale":[0.17,0.17,0.17],
+    "front":[4.0,0.0,-1.0],
+    "is_collidable" : false,
+    "mass": 4.35,
+    "friction_coefficient": 0.1,
+    "restitution_coefficient": 0.05
+}

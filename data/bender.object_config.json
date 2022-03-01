@@ -1,0 +1,12 @@
+{
+    "render_asset": "bender.glb",
+    "collision_asset": "bender.glb",
+    "join_collision_meshes": false,
+    "scale":[0.1,0.1,0.1],
+
+    "front":[-2.0,0.0,-1.0],
+    "mass": 4.35,
+    "friction_coefficient": 0.4,
+    "restitution_coefficient": 0,
+    "COM": [0, -4, 0]
+}

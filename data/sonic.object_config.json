@@ -1,0 +1,11 @@
+{
+    "render_asset": "sonic.glb",
+    "collision_asset": "sonic.glb",
+    "join_collision_meshes": false,
+    "scale":[0.03,0.03,0.03],
+
+    "mass": 4.35,
+    "friction_coefficient": 0.4,
+    "restitution_coefficient": 0,
+    "COM": [0, 0.05, 0]
+}
