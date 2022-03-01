@@ -3,6 +3,7 @@
 # TODO: navmesh setting
 # TODO: navmesh recompute for every ped and agent?
 # TODO: time limit for each path?
+# TODO: set the object's "COM"
 # Import necessary modules, define some convenience functions, and initialize the Simulator and Agent.
 import math
 import os
@@ -180,7 +181,7 @@ def simulate(sim, dt=1.0, get_frames=True):
     observations = []
     start_time = sim.get_world_time()
     while sim.get_world_time() < start_time + dt:
-        sim.step_physics(1.0 / 60.0)
+        sim.step_physics(1.0 / 30.0)
         if get_frames:
             observations.append(sim.get_sensor_observations())
     return observations
@@ -520,7 +521,8 @@ np.random.seed(seed)
 # Load the selected object, here we use locobot and place it on the NavMesh
 print(str(os.path.join(data_path, "sci-fi_police_reupload/scene.gltf")))
 locobot_template_id = obj_attr_mgr.load_configs(
-    str(os.path.join(data_path, "objects/gladiador")),False
+    # nylan, angry_girl, sonic,bender,fox
+    str(os.path.join(data_path, "objects/anime_girl")),False
     # str(os.path.join(data_path, "sci-fi_police_reupload/scene.gltf")),False
 )[0]
 # load a selected target object and place it on the NavMesh
