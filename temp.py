@@ -148,7 +148,7 @@ class PedestrianPathFollower(object):
             else:
                 self.curr_path += 1
 
-    def track_ped_waypoint(self,mls, mts, dt=1.0 / 60.0):
+    def track_ped_waypoint(self,mls, mts, dt=1.0 /24.0):
         angular_error_threshold = 0.5
         max_linear_speed = 1.0
         max_turn_speed = 1.0
