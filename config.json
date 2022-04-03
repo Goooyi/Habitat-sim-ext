@@ -1,0 +1,28 @@
+{
+    "video_prefix": "walk_0",
+    "video_time": 6,
+    "width": 640,
+    "height": 480,
+    "default_agent": 0,
+    "sensor_height": 1.0,
+    "color_sensor_1st_person": true,
+    "color_sensor_3rd_person": false,
+    "depth_sensor_1st_person": false,
+    "semantic_sensor_1st_person": true,
+    "seed": 4,
+    "enable_physics": true,
+    "agent_max_linear_speed":1,
+    "agent_max_turn_speed":1,
+    "pedestrian_max_linear_speed": [1,1,1],
+    "pedestrian_max_turn_speed": [1,1,1],
+    "semantic_id": [1,1,1],
+    "total_path_number":[2,4,4],
+    "frame_rate": 24,
+    "output_path": "habitat_sim_output",
+    "scene": "./data/scene_datasets/hm3d-val-habitat/00800-TEEsavR23oF/TEEsavR23oF.basis.glb",
+    "pedestrians":[
+	    "angry_girl",
+        "sonic",
+        "bender"
+	]
+}
