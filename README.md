@@ -1,5 +1,6 @@
-# ReadME
+# My work
 To generate random walking dataset, use `random_walk.py'.
+
 configs in `config.json`
 
 Original Readme down below
