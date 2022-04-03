@@ -1,9 +1,9 @@
 # My work
-To generate random walking dataset, use `random_walk.py'.
+To generate random walking dataset, use `random_walk.py`, which uses `Pedestrian.py`.
 
 configs in `config.json`
 
-Original Readme down below
+Original Readme down below.
 
 
 
