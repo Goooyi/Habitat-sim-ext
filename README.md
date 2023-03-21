@@ -3,7 +3,7 @@
 build from source:
 Via Source - For active development. Read [build instructions and common build issues](BUILD_FROM_SOURCE.md).
 
-the `/data` folder which container your scene .glb file and should be placed in `randomwalk` folder:
+the `/data` folder which container your scene .glb file and moving objcets' asset should be placed in `randomwalk` folder:
 folder structure of randomwalk like this:
 ```
 randomwalk
@@ -36,6 +36,15 @@ To generate random walking dataset, use `random_walk.py`, which uses `Pedestrian
 configs in `config.json`
 
 Original Readme down below.
+
+run with
+```
+python randomwalk/randomwalk.py
+```
+
+# The original readme of habitat v0.2.1 is down below
+
+
 
 
 
@@ -78,6 +87,7 @@ https://user-images.githubusercontent.com/2941091/126080914-36dc8045-01d4-4a68-8
 ## Table of contents
 - [Install](#install)
 - [Usage](#usage)
+- [The original readme of habitat v0.2.1 is down below](#the-original-readme-of-habitat-v021-is-down-below)
 - [Habitat-Sim](#habitat-sim)
   - [Table of contents](#table-of-contents)
   - [Citing Habitat](#citing-habitat)
