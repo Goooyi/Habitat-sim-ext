@@ -1,4 +1,33 @@
-# My work
+# Install
+
+build from source:
+Via Source - For active development. Read [build instructions and common build issues](BUILD_FROM_SOURCE.md).
+
+the `/data` folder which container your scene .glb file and should be placed in `randomwalk` folder:
+folder structure of randomwalk like this:
+
+randomwalk
+├── config.json
+├── data
+│   ├── objects
+│   │   ├── angry_girl.glb
+│   │   ├── angry_girl.object_config.json
+│   │   │...
+│   └── scene_datasets
+│       ├── hm3d-val-habitat
+│       │   └── 00800-TEEsavR23oF
+│       │       ├── TEEsavR23oF.basis.glb
+│       │       └── TEEsavR23oF.basis.navmesh
+│       └── mp3d
+│           └── 1LXtFkjw3qL
+│               ├── 1LXtFkjw3qL.glb
+│               ├── 1LXtFkjw3qL.house
+│               ├── 1LXtFkjw3qL.navmesh
+│               └── 1LXtFkjw3qL_semantic.ply
+├── pedestrian.py
+└── random_walk.py
+
+# Usage
 To generate random walking dataset, use `random_walk.py`, which uses `Pedestrian.py`.
 
 configs in `config.json`
@@ -44,13 +73,22 @@ https://user-images.githubusercontent.com/2941091/126080914-36dc8045-01d4-4a68-8
 ---
 
 ## Table of contents
-   1. [Citing Habitat](#citing-habitat)
-   1. [Installation](#installation)
-   1. [Testing](#testing)
-   1. [Documentation](#documentation)
-   1. [Datasets](#datasets)
-   1. [External Contributions](#external-contributions)
-   1. [License](#license)
+- [Install](#install)
+- [Usage](#usage)
+- [Habitat-Sim](#habitat-sim)
+  - [Table of contents](#table-of-contents)
+  - [Citing Habitat](#citing-habitat)
+  - [Installation](#installation)
+    - [\[Recommended\] Conda Packages](#recommended-conda-packages)
+      - [Preparing conda env](#preparing-conda-env)
+      - [conda install habitat-sim](#conda-install-habitat-sim)
+  - [Testing](#testing)
+    - [Common testing issues](#common-testing-issues)
+  - [Documentation](#documentation)
+    - [Questions?](#questions)
+  - [Datasets](#datasets)
+  - [External Contributions](#external-contributions)
+  - [License](#license)
 
 
 ## Citing Habitat

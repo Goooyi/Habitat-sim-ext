@@ -19,7 +19,7 @@
     "total_path_number":[2,4,4],
     "frame_rate": 24,
     "output_path": "habitat_sim_output",
-    "scene": "./data/scene_datasets/hm3d-val-habitat/00800-TEEsavR23oF/TEEsavR23oF.basis.glb",
+    "scene": "/Users/yigao/habitat-sim/data/scene_datasets/hm3d-val-habitat/00800-TEEsavR23oF/TEEsavR23oF.basis.glb",
     "pedestrians":[
 	    "angry_girl",
         "sonic",
