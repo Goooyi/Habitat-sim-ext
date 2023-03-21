@@ -5,9 +5,9 @@ Via Source - For active development. Read [build instructions and common build i
 
 the `/data` folder which container your scene .glb file and should be placed in `randomwalk` folder:
 folder structure of randomwalk like this:
-
+```
 randomwalk
-├── config.json
+├── config.json 
 ├── data
 │   ├── objects
 │   │   ├── angry_girl.glb
@@ -18,14 +18,17 @@ randomwalk
 │       │   └── 00800-TEEsavR23oF
 │       │       ├── TEEsavR23oF.basis.glb
 │       │       └── TEEsavR23oF.basis.navmesh
+│       │       │....
 │       └── mp3d
 │           └── 1LXtFkjw3qL
 │               ├── 1LXtFkjw3qL.glb
 │               ├── 1LXtFkjw3qL.house
 │               ├── 1LXtFkjw3qL.navmesh
 │               └── 1LXtFkjw3qL_semantic.ply
+│               │....
 ├── pedestrian.py
 └── random_walk.py
+```
 
 # Usage
 To generate random walking dataset, use `random_walk.py`, which uses `Pedestrian.py`.
