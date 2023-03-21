@@ -1,3 +1,5 @@
+# Please refer to branch v0.2.1 for usage
+# main branch is only for dev log
 # project structure
 
 `temp.py` contains code class/fucntion needed for random walk simulation for Emboded Agent in habitat simulator.
