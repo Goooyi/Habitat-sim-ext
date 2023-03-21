@@ -465,27 +465,6 @@ def setup_path_visualization(sim, path_follower, vis_samples=100):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #%%
 # Embodied Continuous Navigation to find a sampled object
 sim_settings = make_default_settings()
