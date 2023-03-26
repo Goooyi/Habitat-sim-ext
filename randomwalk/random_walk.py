@@ -302,11 +302,32 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--no-display", dest="display", action="store_false")
     parser.add_argument("--no-make-video", dest="make_video", action="store_false")
+    parser.add_argument("--video-prefix", dest="video_prefix", default=None, help="setting the data category and video prefix")
+    parser.add_argument("--video-time", dest="video_time", default=None, help="setting the video time", type=int)
+    parser.add_argument("--seed", dest="seed", default=None, type=int)
+    parser.add_argument("--linear-speed", dest="linear_speed", default=None, type=int)
+    parser.add_argument("--turn-speed", dest="turn_speed", default=None, type=int)
+    parser.add_argument("--scene", dest="scene", default=None)
+    parser.add_argument("--pedestrians", nargs="+",  dest="pedestrians", default=None)
     parser.set_defaults(show_video=False, make_video=True)
     args, _ = parser.parse_known_args()
     show_video = args.display
     display = args.display
     make_video = args.make_video
+    if args.video_prefix:
+        config["video_prefix"] = args.video_prefix
+    if args.video_time:
+        config["video_time"] = args.video_time
+    if args.seed:
+        config["seed"] = args.seed
+    if args.linear_speed:
+        config["pedestrian_max_linear_speed"] = [args.linear_speed]*3
+    if args.turn_speed:
+        config["pedestrian_max_turn_speed"] = [args.turn_speed]*3
+    if args.scene:
+        config["scene"] = args.scene
+    if args.pedestrians:
+        config["pedestrians"] = args.pedestrians
 else:
     show_video = False
     make_video = False

@@ -1,6 +1,6 @@
 {
     "video_prefix": "walk_0",
-    "video_time": 6,
+    "video_time": 10,
     "width": 640,
     "height": 480,
     "default_agent": 0,
@@ -15,14 +15,14 @@
     "agent_max_turn_speed":1,
     "pedestrian_max_linear_speed": [1,1,1],
     "pedestrian_max_turn_speed": [1,1,1],
-    "semantic_id": [1,1,1],
+    "semantic_id": [1,2,3,4,5,6],
     "total_path_number":[2,4,4],
     "frame_rate": 24,
     "output_path": "habitat_sim_output",
-    "scene": "/Users/yigao/habitat-sim/data/scene_datasets/hm3d-val-habitat/00800-TEEsavR23oF/TEEsavR23oF.basis.glb",
+    "scene": "./data/scene_datasets/hm3d-val-habitat/00800-TEEsavR23oF/TEEsavR23oF.basis.glb",
     "pedestrians":[
-	    "angry_girl",
-        "sonic",
-        "bender"
+	    "miniature_cat",
+	    "miniature_cat",
+	    "miniature_cat"
 	]
 }
