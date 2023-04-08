@@ -21,12 +21,18 @@ class PedestrianPathFollower(object):
         self.rigid_obj_mgr = rigid_obj_mgr
         self.mls = mls
         self.mts = mts
+        self.obj = None
+        self.obj_id = None 
 
         # here velocity
         # initial paths to one
 
+    def delete_pedestrian(self, obj_tmplate_id):
+        self.rigid_obj_mgr.remove_object_by_id(obj_tmplate_id)
+
     def initial_pedestrian_path(self,obj_template_id):
         self.obj = self.rigid_obj_mgr.add_object_by_template_id(obj_template_id)
+        self.obj_id = self.obj.object_id
         self.obj.semantic_id = self.semantic_id
         self.sim.set_object_motion_type(habitat_sim.physics.MotionType.KINEMATIC, self.obj.object_id)
         

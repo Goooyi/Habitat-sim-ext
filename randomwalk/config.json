@@ -1,5 +1,7 @@
 {
-    "video_prefix": "walk_0",
+    "nonDynamic": false,
+    "nonDynamicCount": 10,
+    "video_prefix": "walk_1",
     "video_time": 10,
     "width": 640,
     "height": 480,
@@ -7,7 +9,7 @@
     "sensor_height": 1.0,
     "color_sensor_1st_person": true,
     "color_sensor_3rd_person": false,
-    "depth_sensor_1st_person": false,
+    "depth_sensor_1st_person": true,
     "semantic_sensor_1st_person": true,
     "seed": 4,
     "enable_physics": true,
@@ -16,13 +18,30 @@
     "pedestrian_max_linear_speed": [1,1,1],
     "pedestrian_max_turn_speed": [1,1,1],
     "semantic_id": [1,2,3,4,5,6],
-    "total_path_number":[2,4,4],
+    "total_path_number":[2,4,4,5,5,5],
     "frame_rate": 24,
-    "output_path": "habitat_sim_output",
+    "output_path": "output/habitat_sim_output_nonDynamic_bashSeed_test_6",
     "scene": "./data/scene_datasets/hm3d-val-habitat/00800-TEEsavR23oF/TEEsavR23oF.basis.glb",
     "pedestrians":[
 	    "miniature_cat",
 	    "miniature_cat",
 	    "miniature_cat"
-	]
+	],
+    "semantic_mapping_name2id": {
+        "angry_girl":1,
+        "ferbibliotecario":2,
+        "miniature_cat":3,
+        "robot_2020":4,
+        "shiba":5,
+        "toy_car":6
+    },
+    "objectid_mapping_id2colors":{
+        "0": [0,0,0],
+        "1": [255, 0, 255],
+        "2": [255,0,0],
+        "3": [0,255,0],
+        "4": [0,0,255],
+        "5": [255,255,0],
+        "6": [0,255,255]
+    }
 }

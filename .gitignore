@@ -185,3 +185,9 @@ yarn-debug.log*
 yarn-error.log*
 .npm/
 coverage_js/
+
+# randomwalk
+randomwalk/data/
+randomwalk/output/
+randomwalk/output_old/
+randomwalk/habitat_sim_output*
