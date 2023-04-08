@@ -308,6 +308,7 @@ if __name__ == "__main__":
     parser.add_argument("--seed", dest="seed", default=None, type=int)
     parser.add_argument("--speed", dest="speed", default=None, type=int)
     parser.add_argument("--scene", dest="scene", default=None)
+    parser.add_argument("--semantic-id-by-catogry", dest="semantic_id_by_cat", action='store_true')
     parser.add_argument("--pedestrians", nargs="+",  dest="pedestrians", default=None)
     parser.add_argument("--non-dynamic", dest="nonDynamic", action="store_true")
     parser.set_defaults(show_video=False, make_video=True)
@@ -331,7 +332,11 @@ if __name__ == "__main__":
         config["pedestrian_max_turn_speed"] = [args.speed]* len(config["pedestrians"])
         config["pedestrian_max_linear_speed"] = [args.speed]* len(config["pedestrians"])
     # object name to semantic id mapping
-    semantic_ids = [config["semantic_mapping_name2id"][i] for i in config["pedestrians"]]
+    # TODO: change "semantic_mapping_name2id" to "semantic_mapping_name2Catid" 
+    if args.semantic_id_by_cat:
+        semantic_ids = [config["semantic_mapping_name2id"][i] for i in config["pedestrians"]]
+    else:
+        semantic_ids = [x+1 for x in range(len(config["pedestrians"]))]
 else:
     show_video = False
     make_video = False
@@ -762,7 +767,7 @@ video_prefix = config["video_prefix"]
 # TODO: replace 480p with config_value
 output_path = dir_path / config["output_path"]
 
-physics_info_folder = output_path / "physics_info"
+stats_info_folder = output_path / "stats_info"
 img_folder = output_path / "habitat_sim_DAVIS"
 
 # mapping video name to index
@@ -770,7 +775,7 @@ rgb_folder = img_folder / 'JPEGImages/480p'
 rgb_folder.mkdir(parents=True, exist_ok=True)
 folderIndex = len([x for x in rgb_folder.iterdir() if x.is_dir()])
 folderIndex = '%04i' % (folderIndex)
-name_mapping = [{folderIndex : video_prefix}]
+# mapping each video ids to descrption
 
 rgb_save_folder = img_folder / 'JPEGImages/480p' / folderIndex
 depth_save_folder = img_folder / 'Annotations/480p_depth' / folderIndex
@@ -778,8 +783,8 @@ colored_mask_save_folder = img_folder / 'Annotations/480p_colored' / folderIndex
 objectid_mask_save_folder = img_folder / 'Annotations/480p_objectID' / folderIndex
 imageSets_folder = img_folder / 'ImageSets/480p'
 
-camera_info_folder = physics_info_folder / '480p' / folderIndex
-peds_infos_folder = physics_info_folder / '480p' / folderIndex
+camera_info_folder = stats_info_folder / '480p' / folderIndex
+peds_infos_folder = stats_info_folder / '480p' / folderIndex
 
 folders = [rgb_save_folder, depth_save_folder, colored_mask_save_folder,
              objectid_mask_save_folder, imageSets_folder, camera_info_folder,peds_infos_folder]
@@ -789,6 +794,7 @@ for f in folders:
 # create necessary names
 imageSets_2016 = imageSets_folder / 'val.txt'
 imageSets_2017 = imageSets_folder / 'val2017.txt'
+# semanticID_to_name_mapping = imageSets_folder / 'semanticID_to_name.npy'
 
 # save images and GT for images
 for idx,obs in enumerate(observations):
@@ -827,17 +833,30 @@ for idx,obs in enumerate(observations):
         temp2 = '/Annotations/480p/' + folderIndex + '/' + img_name
         f.write(temp1 + ' ' + temp2 + '\n')
 
+with open(str(imageSets_2017), 'a') as f:
+    f.write(folderIndex + '\n')
+
 # save agent/pedestrian movement GT
 with open(str(peds_infos_folder / "peds_infos.npy"), 'wb') as f:
     np.save(f, peds_infos)
 
-with open(str(imageSets_2017), 'a') as f:
-    f.write(folderIndex + '\n')
+with open(str(peds_infos_folder / "semantic_id_to_name.json"), 'w+') as f:
+    tmp = {str(idx) : name for name, idx in zip(config["pedestrians"], semantic_ids)}
+    json.dump(tmp, f)
+
+# with open(str(semanticID_to_name_mapping), 'ab') as f:
+    # tmp = {str(idx) : name for name, idx in zip(config["pedestrians"], semantic_ids)}
+    # for name, id in zip(config["pedestrians"], semantic_ids):
+    #     f.write(str(id) + '\t' + name + '\n')
+    # json.dump(tmp, f)
+    # np.save(str(semanticID_to_name_mapping), tmp)
+
 with open(str(camera_info_folder / "camera_spec.npy"), 'wb') as f:
     np.save(f, camera_info)
-# will oppended
-with open(str(output_path / "name_mapping.npy"), 'ab') as f:
-    np.save(f, name_mapping)
+
+# TODO: write more clear
+with open(str(output_path / "video_name_mapping.txt"), 'a') as f:
+    f.write(folderIndex + '\t' + video_prefix + '\n')
 
 # video rendering with embedded 1st person view
 if make_video:
