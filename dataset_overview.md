@@ -13,7 +13,7 @@
 ### Overview
 
 We use of the [Facebook AI Habitat simulation platform](https://github.com/facebookresearch/habitat-sim) as a basic set-up with embodied agents in 3D
-virtual environments for generating desired data. We made a configuration API on top of the AI habitat simulator to performe dataset generate our HabitatDyn dataset, including camera adjustment, random pathfinding abd embodied agents navigation in the simulated scene.
+virtual environments for generating desired data. We made a configuration API on top of the AI habitat simulator to performe dataset generate our HabitatDyn dataset, including camera adjustment, annotation recording, random pathfinding abd embodied agents navigation in the simulated scene.
 
 HabitatDyn contains 1590 high-quality videos for 30 meticulously curated scenes from [HM3D](https://aihabitat.org/datasets/hm3d/, citation down below). These scenes feature free, randomly placed object models sourced from the Internet. To add a touch of realism and dynamism, 3 or 6 moving object instances from each model are randomly dropped into the scene, and a robot agent equipped with a camera is also present to capture the scene in detail (camera specifications can be found in the dataset). The videos come with RGB, depth, and semantic annotations, ensuring that researchers have access to a wealth of information for their projects.
 
