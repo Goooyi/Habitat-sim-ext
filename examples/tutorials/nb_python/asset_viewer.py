@@ -67,15 +67,16 @@ if "google.colab" in sys.modules:
     os.environ["IMAGEIO_FFMPEG_EXE"] = "/usr/bin/ffmpeg"
 
 repo = git.Repo(".", search_parent_directories=True)
-dir_path = repo.working_tree_dir
+# dir_path = repo.working_tree_dir
+dir_path = '/home/gao/dev/project_remote/Habitat-sim-ext/randomwalk/output'
 # %cd $dir_path
-data_path = os.path.join(dir_path, "data")
+data_path = os.path.join(dir_path, "../data")
 # fmt: off
-output_directory = "examples/tutorials/asset_viewer_output/"  # @param {type:"string"}
+output_directory = "asset_viewer_output/"  # @param {type:"string"}
 # fmt: on
 output_path = os.path.join(dir_path, output_directory)
 if not os.path.exists(output_path):
-    os.mkdir(output_path)
+    os.makedirs(output_path, exist_ok=True)
 
 # define some globals the first time we run.
 if "sim" not in globals():
@@ -231,7 +232,7 @@ def make_simulator_from_settings(sim_settings):
     sim = habitat_sim.Simulator(cfg)
     # Managers of various Attributes templates
     obj_attr_mgr = sim.get_object_template_manager()
-    obj_attr_mgr.load_configs(str(os.path.join(data_path, "objects/example_objects")))
+    obj_attr_mgr.load_configs(str(os.path.join(data_path, "objects")))
     prim_attr_mgr = sim.get_asset_template_manager()
     stage_attr_mgr = sim.get_stage_template_manager()
     # Manager providing access to rigid objects
@@ -739,7 +740,8 @@ make_simulator_from_settings(sim_settings)
 # @markdown and then load it below by setting object_to_view_path
 # @markdown Put the full path to the asset you would like to view here :
 # fmt: off
-object_to_view_path = "./data/test_assets/scenes/simple_room.glb"  # @param {type:"string"}
+# object_to_view_path = "./data/test_assets/scenes/simple_room.glb"  # @param {type:"string"}
+object_to_view_path = "/home/gao/dev/project_remote/Habitat-sim-ext/randomwalk/data/objects/tsai_ing-wen.glb"  # @param {type:"string"}
 # fmt: on
 
 # this is the name to save the resultant video with
@@ -771,11 +773,17 @@ if os.path.exists(object_to_view_path) and os.path.isfile(object_to_view_path):
     # if using a stage and it displays sideways, you may need to reorient it via its attributes for it to display properly.
 
     # @markdown If the asset being displayed is on its side, enable orientation_correction below :
-    orientation_correction = False  # @param {type: "boolean"}
+    orientation_correction = True  # @param {type: "boolean"}
     # This will correct the orientation (Dependent on PR : )
+    print("original orientation")
+    print("orient_up", object_template.orient_up)
+    print("orient_front", object_template.orient_front)
+
     if orientation_correction:
-        object_template.orient_up = (0.0, 0.0, 1.0)
-        object_template.orient_front = (0.0, 1.0, 0.0)
+        # object_template.orient_up = (0.0, 1.0, 0.0)
+        object_template.orient_front = (0.0, 0.0, -1.0)
+        print("orient_up", object_template.orient_up)
+        print("orient_front", object_template.orient_front)
 
     # modify template here if desired and then register it
     obj_temp_id = obj_attr_mgr.register_template(object_template)
@@ -785,10 +793,13 @@ if os.path.exists(object_to_view_path) and os.path.isfile(object_to_view_path):
     # place object in center - must be done before setting to static
     # get bb of object
     obj_bbox = obj.root_scene_node.compute_cumulative_bb()
+    print("bbox of obj is :", obj_bbox)
     # find center of bb and move to scene origin - this centers object
     obj.translation = -obj_bbox.center()
+    print("center of obj: ", obj_bbox.center())
     # get max dim to use as scale for sensor placement
     bb_scale = max(obj_bbox.max)
+    print("scale of object is: ", bb_scale)
     # determine sensor placement based on size of object
     sensor_pos = bb_scale * np.array([0, 1, 2])
     # set object to be static

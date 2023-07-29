@@ -18,7 +18,7 @@ import habitat_sim.physics
 from habitat_sim.utils import common as ut
 from habitat_sim.utils import viz_utils as vut
 from pedestrian import PedestrianPathFollower
-   
+
 def quaternion_to_list(q: np.quaternion):
     return q.imag.tolist() + [q.real]
 
@@ -138,10 +138,10 @@ def make_default_settings():
     settings = {
         "width": config["width"],#  480, Spatial resolution of the observations
         "height": config["height"], # 270,
-        "scene": os.path.join(dir_path,config["scene"]), # Scene path 
+        "scene": os.path.join(dir_path,config["scene"]), # Scene path
         "default_agent": 0,
         "sensor_height": config["sensor_height"],  # Height of sensors in meters
-        "sensor_pitch": -math.pi / 8.0,  # sensor pitch (x rotation in rads)
+        "sensor_pitch": 0,  # sensor pitch (x rotation in rads)
         "color_sensor_1st_person": config["color_sensor_1st_person"],  # RGB sensor
         "color_sensor_3rd_person": config["color_sensor_3rd_person"],  # RGB sensor 3rd person
         "depth_sensor_1st_person": config["depth_sensor_1st_person"],  # Depth sensor
@@ -200,7 +200,7 @@ def add_gaussian_noise(image, mean=0, std=5):
     # image = image.astype("int16")
     noise_img = image + gaus_noise
     image = ceil_floor_image(image)
-    return noise_img 
+    return noise_img
 
 def ceil_floor_image(image):
     """
@@ -332,7 +332,7 @@ if __name__ == "__main__":
         config["pedestrian_max_turn_speed"] = [args.speed]* len(config["pedestrians"])
         config["pedestrian_max_linear_speed"] = [args.speed]* len(config["pedestrians"])
     # object name to semantic id mapping
-    # TODO: change "semantic_mapping_name2id" to "semantic_mapping_name2Catid" 
+    # TODO: change "semantic_mapping_name2id" to "semantic_mapping_name2Catid"
     if args.semantic_id_by_cat:
         semantic_ids = [config["semantic_mapping_name2id"][i] for i in config["pedestrians"]]
     else:
@@ -342,7 +342,7 @@ else:
     make_video = False
     display = False
 
-# Continuous Path Follower for agent 
+# Continuous Path Follower for agent
 class ContinuousPathFollower(object):
     def __init__(self, sim, path, agent_scene_node, waypoint_threshold):
         self._sim = sim
@@ -436,7 +436,7 @@ def track_waypoint(waypoint, rs, vc, dt=1.0 / 60.0):
 
     # angular part
     rot_dir = 1.0
-    
+
     if mn.math.dot(u_to_waypoint,glob_right) < 0:
     # if mn.math.cross(u_to_waypoint,glob_forward)[1] >0  :
         rot_dir = -1.0
@@ -551,12 +551,13 @@ video_time = config["video_time"]
 # check if there is an object seen in this video:
 seen = False
 observations = []
-# manully add 4 path and loop through this 4 path
-camera_info = {"resolution": [config["width"], config["height"]], "position":[],"orientation":[]}
-# the index of "positions" and "locations" keys is the semantic_id-1 of objects
-peds_infos = {"positions":[list() for _ in range(len(config["pedestrians"]))], 
-                "orientations":[list() for _ in range(len(config["pedestrians"]))]}
+
+
 while not seen:
+    camera_info = {"resolution": [config["width"], config["height"]], "position":[],"orientation":[],"agent_orient":[]}
+    # the index of "positions" and "locations" keys is the semantic_id-1 of objects
+    peds_infos = {"positions":[list() for _ in range(len(config["pedestrians"]))],
+                    "orientations":[list() for _ in range(len(config["pedestrians"]))]}
     # Different objects
     loaded_peds = []
     for i in range(len(config["pedestrians"])):
@@ -579,8 +580,8 @@ while not seen:
             # sim.pathfinder.seed(random.randint(1,100000))
             # tmp = sim.pathfinder.get_random_navigable_point(max_tries=1000)
             # while tmp in already_chosed:
-                # tmp = sim.pathfinder.get_random_navigable_point(max_tries=1000) 
-            tmp = sim.pathfinder.get_random_navigable_point(max_tries=1000) 
+                # tmp = sim.pathfinder.get_random_navigable_point(max_tries=1000)
+            tmp = sim.pathfinder.get_random_navigable_point(max_tries=1000)
             # already_chosed.append(tmp)
             # sim.set_translation(tmp, added_nonDynamic.object_id)
             added_nonDynamic.translation = mn.Vector3(tmp)
@@ -591,7 +592,7 @@ while not seen:
 
     sim_settings["seed"] += 1
     seed = sim_settings["seed"]
-    random.seed(seed)
+    random.seed(str(seed))
     sim.seed(random.randint(1,10000000))
     # reset observations and robot state
     # locobot_obj.translation = sim.pathfinder.get_random_navigable_point()
@@ -606,7 +607,7 @@ while not seen:
         temp.initial_pedestrian_path(loaded_peds[i])
         peds.append(temp)
     observations.clear()
-    
+
     # get shortest path to the object from the agent position
     found_path = False
     path1 = habitat_sim.ShortestPath()
@@ -689,6 +690,7 @@ while not seen:
             # sotre camera info :
             camera_info["position"].append(sim.get_agent(0).get_state().sensor_states["rgba_camera_1stperson"].position.tolist())
             camera_info["orientation"].append(quaternion_to_list(sim.get_agent(0).get_state().sensor_states["rgba_camera_1stperson"].rotation))
+            camera_info["agent_orient"].append(quaternion_to_list(sim.get_agent(0).get_state().rotation))
             # time.sleep(10000)
             # print(sim.get_agent(0).get_state().sensor_states["rgba_camera_1stperson"].hfov)
             # set velocities based on relative waypoint position/direction
@@ -718,9 +720,12 @@ while not seen:
 
             # update pedestrain state and store peds infos
             for index, j in enumerate(peds):
-                cur_loc = j.obj.translation 
-                cur_orientation = j.obj.rotation 
+                # print("HHHHHHHHHHHHHHHHHHHHHHHHHHH")
+                # print(j.semantic_id)
+                cur_loc = j.obj.translation
+                cur_orientation = j.obj.rotation
                 peds_infos["positions"][j.semantic_id - 1].append(np.array(cur_loc)-camera_info["position"][-1])
+                # print(len(peds_infos["positions"][0]))
                 peds_infos["orientations"][j.semantic_id - 1].append((np.array(cur_orientation.vector).tolist()+[cur_orientation.scalar]))
                 j.integrate_state(time_step)
 
@@ -778,6 +783,7 @@ folderIndex = '%04i' % (folderIndex)
 # mapping each video ids to descrption
 
 rgb_save_folder = img_folder / 'JPEGImages/480p' / folderIndex
+semantic_save_folder = img_folder / 'Annotations/480p' / folderIndex
 depth_save_folder = img_folder / 'Annotations/480p_depth' / folderIndex
 colored_mask_save_folder = img_folder / 'Annotations/480p_colored' / folderIndex
 objectid_mask_save_folder = img_folder / 'Annotations/480p_objectID' / folderIndex
@@ -786,24 +792,27 @@ imageSets_folder = img_folder / 'ImageSets/480p'
 camera_info_folder = stats_info_folder / '480p' / folderIndex
 peds_infos_folder = stats_info_folder / '480p' / folderIndex
 
-folders = [rgb_save_folder, depth_save_folder, colored_mask_save_folder,
-             objectid_mask_save_folder, imageSets_folder, camera_info_folder,peds_infos_folder]
+folders = [rgb_save_folder, depth_save_folder, colored_mask_save_folder, semantic_save_folder,
+            objectid_mask_save_folder, imageSets_folder, camera_info_folder,peds_infos_folder]
 for f in folders:
     f.mkdir(parents=True, exist_ok=True)
 
 # create necessary names
 imageSets_2016 = imageSets_folder / 'val.txt'
-imageSets_2017 = imageSets_folder / 'val2017.txt'
+imageSets_2017 = imageSets_folder / 'val_2017.txt'
 # semanticID_to_name_mapping = imageSets_folder / 'semanticID_to_name.npy'
 
 # save images and GT for images
 for idx,obs in enumerate(observations):
-    img_name = '%05i.jpg' % (idx)
+    img_name = '%05i.png' % (idx)
     # save image
+    semantic_image = Image.fromarray((obs["semantic_sensor_1stperson"]*255).astype(np.uint8))
+    semantic_file = semantic_save_folder / ('%05i.png' % (idx))
+    semantic_image.save(str(semantic_file))
     rgb_image = Image.fromarray(obs["rgba_camera_1stperson"])
     rgb_image = rgb_image.convert('RGB')
     rgb_file = rgb_save_folder / img_name
-    rgb_image.save(str(rgb_file))
+    rgb_image.save(str(rgb_file).split('.')[0] + '.jpg')
     # save depth
     depth_image = Image.fromarray((obs["depth_camera_1stperson"]/ 10 * 255).astype(np.uint8), mode="L")
     depth_file = depth_save_folder / img_name
@@ -821,12 +830,12 @@ for idx,obs in enumerate(observations):
     gray_image = Image.fromarray(gray_image)
     gray_image.convert("L").save(str(objectid_mask_file))
     # also save a colored mask image for better visualization
-    colored_mask_image = np.zeros((*shape, 3), dtype=np.uint8)
-    for key, value in config["objectid_mapping_id2colors"].items():
-        colored_mask_image[np.where(np.array(gray_image) == int(key))] = value
-    semantic_colored_file = colored_mask_save_folder / img_name
-    colored_mask_image = Image.fromarray(colored_mask_image)
-    colored_mask_image.save(str(semantic_colored_file))
+    # colored_mask_image = np.zeros((*shape, 3), dtype=np.uint8)
+    # for key, value in config["objectid_mapping_id2colors"].items():
+    #     colored_mask_image[np.where(np.array(gray_image) == int(key))] = value
+    # semantic_colored_file = colored_mask_save_folder / img_name
+    # colored_mask_image = Image.fromarray(colored_mask_image)
+    # colored_mask_image.save(str(semantic_colored_file))
 
     with open(str(imageSets_2016), 'a') as f:
         temp1 = '/JPEGImages/480p/' + folderIndex + '/' + img_name
@@ -858,6 +867,7 @@ with open(str(camera_info_folder / "camera_spec.npy"), 'wb') as f:
 with open(str(output_path / "video_name_mapping.txt"), 'a') as f:
     f.write(folderIndex + '\t' + video_prefix + '\n')
 
+make_video = False
 # video rendering with embedded 1st person view
 if make_video:
     video_folder = output_path / 'videos'
@@ -885,7 +895,7 @@ if make_video:
         open_vid=show_video,
         # overlay_settings=overlay_settings,
         overlay_settings=None,
-        depth_clip=20.0,
+        depth_clip=10.0,
     )
 
 # for k,v in sim.__dict__.items():
